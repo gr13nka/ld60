@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compass mockups, cast</title>
+<style>
+  :root { --ink: #16110d; --paper: #e9dfcc; }
+  html, body { margin: 0; height: 100%; background: var(--ink); color: var(--paper); font: 16px/1.3 system-ui, sans-serif; }
+  canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
+  main { position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; padding: 12px; height: 100vh; box-sizing: border-box; pointer-events: none; }
+  figure { margin: 0; display: grid; grid-template-rows: 1fr auto; border: 2px solid #3a2e24; }
+  figure .view { min-height: 0; }
+  figcaption { padding: 8px 12px; background: var(--ink); }
+  figcaption b { font-size: 20px; margin-right: 10px; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<main>
+  <figure><div class="view" data-variant="bronze"></div><figcaption><b>1 · Литая скоба</b>огонёк на мраморной сфере — маршрут · веер спичек на патине — коробок · кованое перо — перо</figcaption></figure>
+  <figure><div class="view" data-variant="iron"></div><figcaption><b>2 · Закопчённый фланец</b>стрелка с угольком под дымчатым стеклом — маршрут · ржавая тёрка — коробок · жестяное перо на пружине — перо</figcaption></figure>
+  <figure><div class="view" data-variant="concrete"></div><figcaption><b>3 · Обломок плиты</b>гнутая арматура с угольком — маршрут · проволочный крюк — коробок · перо на проволоке — перо</figcaption></figure>
+  <figure><div class="view" data-variant="tin"></div><figcaption><b>4 · Табачная жестянка</b>горелая спичка — маршрут · ржавый трезубец — коробок · перо под крышкой — перо</figcaption></figure>
+</main>
+<script type="module" src="./compass-grim.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <title>Quitters</title>
+    <link rel="icon" type="image/svg+xml" href="./src/favicon.svg" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      // A failure that would otherwise be a black screen says what it was, on the page — a
+      // phone has no console to look in. Not a module, so it also hears the game fail to load.
+      // `main.js` and `debug.js` report what the graphics card refuses through the same call.
+      window.reportTrouble = function (text) {
+        var box = document.getElementById('trouble')
+        if (!box) {
+          box = document.body.appendChild(document.createElement('div'))
+          box.id = 'trouble'
+          box.style.cssText =
+            'position:fixed;left:0;right:0;top:0;z-index:99;display:flex;align-items:flex-start;max-height:60%;overflow:auto;' +
+            'background:#400;color:#fdd;font:12px/1.4 ui-monospace,Menlo,monospace'
+          var words = box.appendChild(document.createElement('pre'))
+          words.style.cssText = 'flex:1;margin:0;padding:8px 12px;font:inherit;white-space:pre-wrap;user-select:text;-webkit-user-select:text'
+          // The game may well be going on underneath, so the box can be sent away.
+          var close = box.appendChild(document.createElement('div'))
+          close.textContent = '\u2715'
+          close.style.cssText = 'padding:8px 16px;font-size:20px;cursor:pointer'
+          close.onclick = function () { box.remove() }
+        }
+        var said = box.firstChild
+        if (said.textContent.indexOf(text) < 0) said.textContent += text + '\n'
+      }
+      // Takes back what `reportTrouble` said in those words, for trouble that is over.
+      window.clearTrouble = function (text) {
+        var box = document.getElementById('trouble')
+        if (!box) return
+        box.firstChild.textContent = box.firstChild.textContent.replace(text + '\n', '')
+        if (!box.firstChild.textContent) box.remove()
+      }
+      window.addEventListener('error', function (event) {
+        // A script the game runs without (`stats.js`, where a blocker stops it) is no trouble.
+        if (event.target && event.target.dataset && 'optional' in event.target.dataset) return
+        // Nor is an error inside someone else's script, which the browser will not describe.
+        if (!event.filename && event.message === 'Script error.') return
+        var from = event.filename ? ' (' + event.filename.split('/').pop() + ':' + event.lineno + ')' : ''
+        window.reportTrouble((event.message || 'A file failed to load') + from)
+      }, true)
+      window.addEventListener('unhandledrejection', function (event) {
+        // Firefox's `stack` is the frames alone, so the reason itself is said first.
+        var reason = event.reason
+        var stack = reason && reason.stack ? String(reason.stack) : ''
+        window.reportTrouble(stack.indexOf(String(reason)) < 0 ? reason + '\n' + stack : stack)
+      })
+    </script>
+    <script type="module" src="/src/boot.js"></script>
+  </body>
+</html>

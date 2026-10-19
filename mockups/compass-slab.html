@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compass slab</title>
+<style>
+  :root { --ink: #16110d; --paper: #e9dfcc; }
+  html, body { margin: 0; height: 100%; background: var(--ink); color: var(--paper); font: 16px/1.3 system-ui, sans-serif; }
+  canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
+  main { position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; padding: 12px; height: 100vh; box-sizing: border-box; pointer-events: none; }
+  figure { margin: 0; display: grid; grid-template-rows: 1fr auto; border: 2px solid #3a2e24; }
+  figure .view { min-height: 0; }
+  figcaption { padding: 8px 12px; background: var(--ink); }
+  figcaption b { font-size: 20px; margin-right: 10px; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<main>
+  <figure><div class="view" data-variant="plate"></div><figcaption><b>3.1 · Плита</b>рваный скол, рифлёная арматура, циферблат в чугунном кольце на болтах, трафарет «ПК 63·15», ржавые подтёки</figcaption></figure>
+  <figure><div class="view" data-variant="mosaic"></div><figcaption><b>3.2 · Мозаика</b>кусок стенной смальты с лучами солнца, половина плиток выпала, циферблат в латунном ободке</figcaption></figure>
+  <figure><div class="view" data-variant="pipe"></div><figcaption><b>3.3 · Труба</b>разбитое кольцо бетонной трубы, арматура торчит из сколов, циферблат висит внутри на проволоке</figcaption></figure>
+  <figure><div class="view" data-variant="windowPiece"></div><figcaption><b>3.4 · Окно</b>кусок фасада с окном: стальная рама, циферблат за треснувшим стеклом, номер квартиры, обрубок балконной решётки</figcaption></figure>
+</main>
+<script type="module" src="./compass-slab.js"></script>
+</body>
+</html>

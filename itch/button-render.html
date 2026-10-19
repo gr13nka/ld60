@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Button render</title>
+<style>
+  @font-face { font-family: 'Departure Mono'; src: url('/src/fonts/DepartureMono-Regular.woff2') format('woff2'); }
+  html, body { margin: 0; background: #000; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<!-- The page's buttons drawn by the game's own picture (`picture.js`) as a character's words are
+     (`said-sign.js`): a SaidSign standing in a small piece of the dusk, before a dark wall under a
+     strip of sky, through a look of `themes.js` and its PlayStation screen. Real WebGL, so open it
+     on the dev server in a browser with a card (Orca's tab), not headless.
+
+       /itch/button-render.html?look=eggs|cosy&kind=rate|comment|tiktok|instagram|telegram|ludum&frame=0..7
+
+     The title reads "ready" once drawn; `window.png` is then the button as a data URL, at
+     exactly its size (rate 600×96, comment 600×64, the socials 294×64). -->
+<script type="module">
+import * as THREE from 'three'
+import { Picture } from '/src/picture.js'
+import { SaidSign } from '/src/said-sign.js'
+import { LOOKS } from '/src/themes.js'
+
+Object.defineProperty(window, 'devicePixelRatio', { value: 1 }) // the button at its own pixels
+
+const PARAMS = new URLSearchParams(location.search)
+const KIND = PARAMS.get('kind') || 'rate'
+const LOOK = PARAMS.get('look') || 'eggs'
+const FRAME = Number(PARAMS.get('frame') || 0)
+
+// A character's words are white, and lit past it so they glow (`said-sign.js`); the rate button
+// is the pause's yellow.
+const WHITE = '#f4f1ea', YELLOW = '#ffd24a'
+const GLOW = 1.3 // under the 1.8 of play: a button is too small a screen for that much glow
+
+// The rate button is a picked choice: in brackets that blink.
+const picked = FRAME < 4
+const KINDS = {
+  rate: { w: 600, h: 96, share: 0.55, fill: 0.62, ink: YELLOW, text: picked ? '[ rate this game ★ ]' : 'rate this game ★' },
+  comment: { w: 600, h: 64, share: 0.58, fill: 0.62, ink: WHITE, text: 'leave a comment' },
+  tiktok: { w: 294, h: 64, share: 0.58, fill: 0.62, ink: WHITE, text: 'tiktok' },
+  instagram: { w: 294, h: 64, share: 0.58, fill: 0.62, ink: WHITE, text: 'instagram' },
+  telegram: { w: 294, h: 64, share: 0.58, fill: 0.62, ink: WHITE, text: 'telegram' },
+  ludum: { w: 294, h: 64, share: 0.58, fill: 0.62, ink: WHITE, text: 'ludum dare 60' },
+}
+const K = KINDS[KIND]
+
+// A look's screen is sized in blocks up the picture: in play the cosy look's are two pixels of a
+// 1080-line screen, Arctic Eggs' nearer four. A button keeps the blocks that size on the page.
+const screenOf = (retro, pixels) => retro && { ...retro, lines: Math.round(K.h / pixels), far: 0, steady: 0 }
+const SHADES = {
+  eggs: { ...LOOKS.eggs, retro: screenOf(LOOKS.eggs.retro, 3) },
+  cosy: { ...LOOKS.cosy, retro: screenOf(LOOKS.cosy.retro, 2) },
+}
+
+await document.fonts.load('22px "Departure Mono"')
+const renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true })
+document.body.appendChild(renderer.domElement)
+const picture = new Picture(renderer)
+picture.resize(K.w, K.h)
+
+// The dusk of the lineup room, sampled from a frame of play: a strip of sky from teal down to a
+// warm horizon over the top third of the button, and the dark wall under it.
+const scene = new THREE.Scene()
+const FAR = 60
+const SKY = ['#2f5560', '#8c7360', '#d9a072'] // top, middle, horizon
+const skyColour = (share) => share < 0.5 // 0 at the horizon, 1 at the top
+  ? new THREE.Color(SKY[2]).lerp(new THREE.Color(SKY[1]), share * 2)
+  : new THREE.Color(SKY[1]).lerp(new THREE.Color(SKY[0]), share * 2 - 1)
+const camera = new THREE.PerspectiveCamera(70, K.w / K.h, 0.1, 100)
+const sign = new SaidSign(scene, { wrap: 40, share: K.share, centred: true, rise: 0 })
+sign.setInk(K.ink, GLOW)
+const DEPTH = -3
+const tan = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))
+const view = 2 * tan * -DEPTH
+const top = tan * FAR, horizon = top - (2 * top) / 3
+const sky = new THREE.PlaneGeometry(4000, top - horizon, 1, 8)
+sky.translate(0, (top + horizon) / 2, 0)
+const colours = []
+for (let i = 0; i < sky.attributes.position.count; i++) {
+  const c = skyColour((sky.attributes.position.getY(i) - horizon) / (top - horizon))
+  colours.push(c.r, c.g, c.b)
+}
+sky.setAttribute('color', new THREE.Float32BufferAttribute(colours, 3))
+const skyMesh = new THREE.Mesh(sky, new THREE.MeshBasicMaterial({ vertexColors: true }))
+skyMesh.position.z = -FAR
+scene.add(skyMesh)
+const wall = new THREE.Mesh(new THREE.PlaneGeometry(4000, 2 * top), new THREE.MeshBasicMaterial({ color: '#0b1d26' }))
+wall.position.set(0, horizon - top, -FAR + 1)
+scene.add(wall)
+// The sign is stood as in play, then measured on the picture and set in the middle of the button
+// at the height asked (`fill`, of the button's height, the plane's shadow and room included),
+// narrowed if it would be wider than most of the button.
+const eye = new THREE.Vector3()
+sign.show({ id: 1, text: K.text, typed: Infinity, at: { x: 0, y: 0, z: DEPTH }, clear: 0 }, eye, camera.fov)
+camera.updateMatrixWorld()
+function onPicture() {
+  sign.mesh.updateMatrixWorld()
+  const box = new THREE.Box3().setFromObject(sign.mesh)
+  const a = box.min.clone().project(camera), b = box.max.clone().project(camera)
+  return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, w: Math.abs(b.x - a.x) / 2, h: Math.abs(b.y - a.y) / 2 }
+}
+const LOW = 0.3 // of the plane's half-height, found by eye
+const was = onPicture()
+sign.mesh.scale.multiplyScalar(Math.min(K.fill / was.h, 0.88 / was.w))
+const now = onPicture()
+sign.mesh.position.y -= (now.y + LOW * now.h) * view / 2 // the letters sit high in their plane: its leading is under them
+sign.mesh.position.x -= now.x * view * camera.aspect / 2
+
+picture.setLook({ glow: { strength: 0.25 }, lens: { vignette: 0.15 }, cel: true, shade: SHADES[LOOK] })
+for (let i = 0; i < 4; i++) picture.render(scene, camera)
+window.png = renderer.domElement.toDataURL('image/png')
+document.title = 'ready'
+</script>
+</body>
+</html>

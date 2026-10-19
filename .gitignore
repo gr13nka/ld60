@@ -1,5 +1,36 @@
-node_modules/
-dist/
+node_modules
+dist
+dist-demo
+itch/build
+itch/clips
+__pycache__
+server/.wrangler
 .DS_Store
-*.log
+reference
+# The game's own count, copied from its server (`python3 -m reach pull game`)
+itch/tiktok/reach/events.jsonl
+itch/tiktok/reach/clicks.jsonl
+itch/tiktok/reach/spent.json
+# The poster's queue: what the owner has scheduled on this laptop
+itch/tiktok/post/queue.json
+research_notes/music/
+# Licensed files (the song a score is written to): never in git or a build
 local/
+# The builders' bulky run artifacts (docs/builders-handoff.md): transcripts, per-shift snapshots, pictures, locks, the hands token
+plans/builders/*.jsonl.bak
+plans/builders/*.qwen.jsonl
+plans/builders/*.codex.jsonl
+plans/builders/*.qwen.aborted-*.jsonl
+plans/builders/gen-*.json
+!plans/builders/gen-*.config.json
+!plans/builders/gen-*.decay.json
+plans/builders/looks/
+plans/builders/hands-users/
+plans/builders/*.lock
+plans/builders/hands.sock
+plans/builders/hands.token
+plans/builders/hands-server.*
+plans/builders/codex-gen-0/gen-*.json
+plans/builders/codex-gen-0/looks/
+plans/builders/codex-gen-0/*.jsonl
+!plans/builders/codex-gen-0/ledger.jsonl

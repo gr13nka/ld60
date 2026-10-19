@@ -1,0 +1,66 @@
+/* The window is black from the start: `quitters.css`, which says so too, comes with the game. */
+html {
+  background: #000;
+}
+
+/* The game's face, declared here too: the wait is over before `quitters.css` arrives. */
+@font-face {
+  font-family: 'Departure Mono';
+  src: url('./fonts/DepartureMono-Regular.woff2') format('woff2');
+}
+
+/* On the window, not in `#app`: the wait is over before the frame has a size. Placed without
+   `transform`, which is the turning's. */
+.loading {
+  position: fixed;
+  left: calc(50% - 23px);
+  top: calc(50% - 4px);
+  z-index: 20; /* under the box that says what went wrong */
+  width: 46px;
+  height: 8px;
+  border-radius: 2px;
+  /* Filter, gold band, paper, ash, ember: the cigarette of `models.js`, lying on its side. */
+  background: linear-gradient(90deg, #c98a4b 0 30%, #d8b040 30% 34%, #f1ede2 34% 86%, #7d7a74 86% 91%, #ff6a1f 91% 100%);
+  /* The ink outline; the ember's glow is a layer of its own, so nothing is repainted per turn. */
+  box-shadow: 0 0 0 2px #0a0d18;
+  pointer-events: none;
+  will-change: transform;
+  animation: loading-spin 0.9s linear infinite;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: -3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 140, 50, 0.85), rgba(255, 110, 30, 0) 70%);
+}
+
+.loading-word {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: calc(50% + 44px);
+  z-index: 20;
+  text-align: center;
+  color: #f4f1ea;
+  /* The menu's lettering: twice the face's 11 px grid, so its pixels stay whole. */
+  font: 22px 'Departure Mono', ui-monospace, monospace;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Whatever the game puts up before its first scene is drawn stays unseen behind the mark. */
+.loading-alone #app {
+  opacity: 0;
+}
+
+/* `transform` and nothing else, or the browser turns it on the thread the world is built on. */
+@keyframes loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

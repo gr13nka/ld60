@@ -1,0 +1,92 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>routes</title>
+<style>
+  :root { --paper: #f4f1ea; --ink: #1d1d1b; --faint: #8f8a80; --wash: rgba(29, 29, 27, 0.07); --panel: #ebe7de; --line: #d2cdc1; --accent: #2f6fd6; --wrong: #e03131; }
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #1b1c1e; --ink: #e8e4da; --faint: #7a7d82; --wash: rgba(232, 228, 218, 0.07); --panel: #232427; --line: #393b40; --accent: #6ea0f0; --wrong: #ff6b6b; }
+  }
+  html, body { margin: 0; height: 100%; background: var(--paper); color: var(--ink); overflow: hidden; font: 12px/1.4 system-ui, sans-serif; }
+  body { display: grid; grid-template-columns: minmax(0, 1fr) 300px; }
+  #stage { position: relative; min-width: 0; }
+  #stage canvas { position: absolute; inset: 0; display: block; touch-action: none; }
+  #tools { position: absolute; top: 10px; left: 10px; display: flex; gap: 8px; align-items: center; }
+  .bar { display: flex; gap: 2px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 3px; }
+  .bar button { border: 0; background: none; padding: 5px 9px; border-radius: 4px; }
+  .bar button.on { background: var(--ink); color: var(--paper); }
+  kbd { font: inherit; opacity: 0.55; margin-left: 4px; }
+  #hint { position: absolute; top: 52px; left: 10px; color: var(--faint); pointer-events: none; background: var(--paper); padding: 1px 4px; border-radius: 3px; }
+  aside { background: var(--panel); border-left: 1px solid var(--line); overflow-y: auto; padding: 10px 12px; }
+  h2 { display: flex; justify-content: space-between; align-items: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--faint); margin: 16px 0 6px; font-weight: 600; }
+  h2:first-child { margin-top: 0; }
+  h3 { font-size: 11px; color: var(--faint); margin: 8px 0 2px; font-weight: 600; }
+  label { display: flex; align-items: center; gap: 6px; margin: 4px 0; }
+  label > span { width: 52px; color: var(--faint); }
+  input { font: inherit; color: inherit; background: var(--paper); border: 1px solid var(--line); border-radius: 3px; padding: 2px 4px; min-width: 0; flex: 1; }
+  button { font: inherit; color: inherit; background: var(--paper); border: 1px solid var(--line); border-radius: 3px; padding: 3px 8px; cursor: pointer; }
+  button.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  button:disabled { opacity: 0.4; cursor: default; }
+  .row { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; margin: 4px 0; }
+  .list { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 4px; background: var(--paper); }
+  .list > li { border-top: 1px solid var(--line); padding: 4px 6px; cursor: pointer; }
+  .list > li:first-child { border-top: 0; }
+  .list > li.on { background: var(--wash); box-shadow: inset 3px 0 0 var(--accent); }
+  .list > li.line { padding-left: 18px; }
+  .list .said { color: var(--faint); font-size: 11px; }
+  .list .said.wrong { color: var(--wrong); }
+  .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .seg { display: flex; flex-wrap: wrap; }
+  .seg button { border-radius: 0; margin-left: -1px; }
+  .seg button:first-child { border-radius: 3px 0 0 3px; margin-left: 0; }
+  .seg button:last-child { border-radius: 0 3px 3px 0; }
+  .scale { height: 10px; border-radius: 3px; margin: 4px 0 2px; }
+  .faint { color: var(--faint); }
+  .wrong { color: var(--wrong); }
+  #status { color: var(--faint); margin-top: 12px; }
+  .keys { color: var(--faint); margin: 0; padding-left: 14px; }
+  [hidden] { display: none !important; }
+</style>
+<!-- The story's routes, NPC to NPC, over a place's roofs from above. npm run dev, then
+     /itch/routes.html (?place=<name>, balcony by default). They are plans/<name>-routes.json, written
+     by vite.config.js's /__routes route; scripts/builders/routes.mjs is their shape and their checks.
+     docs/internals/parkour.md ("Story routes") says more. -->
+<div id="stage">
+  <canvas id="canvas"></canvas>
+  <div id="tools">
+    <div class="bar" id="toolBar">
+      <button data-tool="select">Select<kbd>V</kbd></button>
+      <button data-tool="route">Draw way<kbd>W</kbd></button>
+      <button data-tool="line">Other line<kbd>L</kbd></button>
+    </div>
+    <div class="bar" id="moveBar"></div>
+  </div>
+  <div id="hint"></div>
+</div>
+<aside>
+  <h2>Level, raw</h2>
+  <label title="only the roofs at these heights are drawn, and points snap to them"><span>floor ≥</span><input id="bandMin" type="number" step="10" placeholder="all heights"></label>
+  <label><span>floor ≤</span><input id="bandMax" type="number" step="10" placeholder="all heights"></label>
+  <div id="roofScale"></div>
+  <h2>Heights <span class="seg" id="heights"></span></h2>
+  <div class="faint">Inferred: each leg asks for a rise by its move and the length drawn (a glide 1 down for 2.4 on, a climb as high as it is long), the round closed, the Табачная lowest. The profile (P) shows the picked way.</div>
+  <div id="heightsSaid"></div>
+  <h2>Ways <span class="faint" style="text-transform:none;letter-spacing:0">the round, each act; off it at Ворон, on to the Табачная</span></h2>
+  <ul class="list" id="ways"></ul>
+  <h2>Picked</h2>
+  <div id="picked"></div>
+  <h2>Stops</h2>
+  <ul class="list" id="stops"></ul>
+  <h2>Keys</h2>
+  <ul class="keys">
+    <li>pick a way, W, then click points from its first stop; a click on its last stop ends it (Enter too) · Esc gives it up</li>
+    <li>1–6: how the next leg is crossed, or the picked leg</li>
+    <li>L: click a point of a drawn way, draw, click a later point of it: another line, fast or slow</li>
+    <li>drag a point or a stop · Alt: keep its height · double-click a leg: a new point · right-click a point: remove it</li>
+    <li>a point takes the height of the roof under it, within the floors shown</li>
+    <li>Space or middle/right drag: pan · wheel: zoom · F: fit · J: how far a jump carries · P: the profile</li>
+    <li>Del · Ctrl+Z · Ctrl+Shift+Z · saved every 15 s and on leaving · Ctrl+S: now</li>
+  </ul>
+  <div id="status"></div>
+</aside>
+<script type="module" src="./routes.js"></script>

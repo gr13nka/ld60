@@ -1,0 +1,226 @@
+STEAM-VISIBLE {"stop":"Чайка · крыша, антенна","from":[0,0,17],"metres":259,"at":[-257,32,32],"yaw":-86,"pitch":7,"across":82,"seized":true}
+STEAM-VISIBLE {"stop":"Ворон · Сортировочная","from":[-321,-309,229],"metres":240,"at":[-553,-241,226],"yaw":-91,"pitch":16,"across":139,"seized":false}
+STEAM-VISIBLE {"stop":"Тамара Ильинична · 19-й ярус","from":[-774,-399,-417],"metres":176,"at":[-653,-348,-536],"yaw":135,"pitch":16,"across":129,"seized":true}
+STEAM-VISIBLE {"stop":"Тамара Ильинична · 19-й ярус","from":[-774,-399,-417],"metres":211,"at":[-900,-304,-558],"yaw":-138,"pitch":26,"across":158,"seized":false}
+STEAM-VISIBLE {"stop":"Енот · свалка у шахты лифта","from":[-1833,-336,255],"metres":253,"at":[-1783,-218,36],"yaw":167,"pitch":27,"across":87,"seized":true}
+STEAM-VISIBLE {"stop":"Человек в трубе · 8-й ярус","from":[-1478,-185,-539],"metres":256,"at":[-1557,-166,-782],"yaw":-162,"pitch":4,"across":80,"seized":true}
+STEAM-VISIBLE {"stop":"Гаврилов · решётка на левой лестнице","from":[-474,-550,605],"metres":267,"at":[-262,-531,444],"yaw":127,"pitch":4,"across":115,"seized":true}
+STEAM-VISIBLE {"stop":"Гаврилов · решётка на левой лестнице","from":[-474,-550,605],"metres":303,"at":[-301,-492,362],"yaw":145,"pitch":11,"across":161,"seized":false}
+STEAM-VISIBLE {"stop":"Табачная · котёл и Главный Центр","cold":true}
+steam: {"turning":43,"seized":28,"trains":9,"mains":16,"verticals":13,"bigGrates":4,"smallGrates":36,"vents":266,"walls":{"trains":20,"mains":10},"dropped":169,"cables":{"catenary":26,"loose":34,"snapped":10,"pipes":40},"anchors":{"walls":11624,"unders":5544},"why":{"solid":111,"cold":9,"pair":7,"leg":1,"wall":15,"front":8},"ventsBefore":266} refused {"disc":536,"slab":562,"shaft":10,"cold":55,"crowded":16}
+{
+ "seed": 1,
+ "layers": [
+  "ways",
+  "blame",
+  "stops",
+  "steam"
+ ],
+ "times": {
+  "ways": {
+   "s": "2.2",
+   "records": 1484
+  },
+  "blame": {
+   "s": "366.3",
+   "records": 1942
+  },
+  "stops": {
+   "s": "1.6",
+   "records": 567
+  },
+  "steam": {
+   "s": "12.6",
+   "records": 1093
+  }
+ },
+ "removed": [
+  {
+   "list": "boxes",
+   "key": "b5",
+   "why": "stands in gull-voron.1"
+  },
+  {
+   "list": "boxes",
+   "key": "b47",
+   "why": "stands in gull-voron.1"
+  },
+  {
+   "list": "boxes",
+   "key": "b57",
+   "why": "stands in gull-voron.2"
+  },
+  {
+   "list": "boxes",
+   "key": "b61",
+   "why": "stands in gull-voron.4"
+  },
+  {
+   "list": "forms",
+   "key": "f6",
+   "why": "stands in gull-voron.8 slab"
+  },
+  {
+   "list": "props",
+   "key": "p:p2",
+   "why": "stands in gull-voron.9"
+  },
+  {
+   "list": "forms",
+   "key": "f1407",
+   "why": "stands in gull-voron.10 slab"
+  },
+  {
+   "list": "forms",
+   "key": "f1408",
+   "why": "stands in gull-voron.10 slab"
+  },
+  {
+   "list": "forms",
+   "key": "f1524",
+   "why": "stands in gull-voron.11"
+  },
+  {
+   "list": "forms",
+   "key": "f1641",
+   "why": "stands in gull-voron.14 slab"
+  },
+  {
+   "list": "assets",
+   "key": "a:slabPlatform-1",
+   "why": "stands in gull-voron.22"
+  },
+  {
+   "list": "forms",
+   "key": "f59",
+   "why": "stands in gull-voron.26"
+  },
+  {
+   "list": "forms",
+   "key": "f11865",
+   "why": "stands in raccoon-pipeman.16 slab"
+  },
+  {
+   "list": "boxes",
+   "key": "b1",
+   "why": "stands in pipeman-gull.22"
+  },
+  {
+   "list": "boxes",
+   "key": "b2",
+   "why": "stands in pipeman-gull.22"
+  },
+  {
+   "list": "boxes",
+   "key": "b3",
+   "why": "stands in pipeman-gull.22"
+  },
+  {
+   "list": "boxes",
+   "key": "b24",
+   "why": "stands in pipeman-gull.22"
+  },
+  {
+   "list": "boxes",
+   "key": "b26",
+   "why": "stands in pipeman-gull.22"
+  },
+  {
+   "list": "boxes",
+   "key": "b29",
+   "why": "stands in pipeman-gull.22"
+  },
+  {
+   "list": "boxes",
+   "key": "b30",
+   "why": "stands in pipeman-gull.22"
+  },
+  {
+   "list": "boxes",
+   "key": "b27",
+   "why": "stands in pipeman-gull.22"
+  },
+  {
+   "list": "forms",
+   "key": "f3",
+   "why": "stands in gull-voron.1 slab"
+  },
+  {
+   "list": "boxes",
+   "key": "b125",
+   "why": "stands in turn gull-voron.8"
+  },
+  {
+   "list": "boxes",
+   "key": "b129",
+   "why": "stands in turn gull-voron.8"
+  }
+ ],
+ "guarded": {
+  "stops": {
+   "refused": 1,
+   "first": [
+    "forms ? in pad voron-gavrilov 14"
+   ]
+  }
+ },
+ "repaired": {},
+ "made": "172/184",
+ "ways": [
+  {
+   "id": "gull-voron",
+   "made": "44/46",
+   "unmade": [
+    "9 jump: with the floors found, (-56.7, -21.6, 164.5) to (-56.1, -29.5, 186.5): jump 22 m > fair 20.4 m",
+    "30 jump: with the floors found, (-141.4, -128.1, 541.6) to (-154.5, -135.7, 526.1): jump 20.3 m > fair 20.1 m"
+   ]
+  },
+  {
+   "id": "voron-tamara",
+   "made": "18/20",
+   "unmade": [
+    "1 glide: its air is blocked at (-324.3, -308.4, 227.4)",
+    "18 wallrun: no wall alongside to run"
+   ]
+  },
+  {
+   "id": "tamara-raccoon",
+   "made": "15/16",
+   "unmade": [
+    "1 glide: its air is blocked at (-780.4, -400.9, -414.8) by f12227"
+   ]
+  },
+  {
+   "id": "raccoon-pipeman",
+   "made": "28/30",
+   "unmade": [
+    "6 jump: with the floors found, (-1906.8, -205.7, 126) to (-1907.5, -216.5, 103.9): jump 22.1 m > fair 22 m",
+    "7 jump: bridged at (-1890.2, -245.5, 97) by f12156: a jump must be a gap"
+   ]
+  },
+  {
+   "id": "pipeman-gull",
+   "made": "21/22",
+   "unmade": [
+    "17 jump: with the floors found, (-83.2, 19.4, -249.3) to (-87.2, -38, -210.7): jump 38.8 m > fair 38.8 m"
+   ]
+  },
+  {
+   "id": "voron-gavrilov",
+   "made": "28/30",
+   "unmade": [
+    "20 wallrun: no wall alongside to run",
+    "24 wallrun: no wall alongside to run"
+   ]
+  },
+  {
+   "id": "gavrilov-tabachnaya",
+   "made": "18/20",
+   "unmade": [
+    "13 wallrun: no wall alongside to run",
+    "15 wallrun: no wall alongside to run"
+   ]
+  }
+ ],
+ "total": "404.0 s"
+}

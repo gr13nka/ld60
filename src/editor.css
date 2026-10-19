@@ -1,0 +1,272 @@
+/* The place editor's panel, status line and add menu (`editor-panel.js`): plain, only while editing. */
+.editor-side,
+.editor-bar,
+.editor-add {
+  position: fixed;
+  box-sizing: border-box;
+  background: rgba(24, 24, 24, 0.9);
+  color: #d8d8d8;
+  font: 12px/1.4 system-ui, sans-serif;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.editor-side {
+  display: none;
+  top: 0;
+  right: 0;
+  bottom: 24px;
+  width: 250px;
+  padding: 10px;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.editor-side.shown {
+  display: flex;
+}
+
+.editor-side.folded {
+  display: none;
+}
+
+.editor-side b {
+  color: #fff;
+}
+
+.editor-name {
+  color: #ff9a2e; /* the selection's orange, as its outline is */
+}
+
+.editor-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.editor-group[hidden],
+.editor-group label[hidden],
+.editor-record[hidden],
+.editor-add[hidden],
+.editor-lasso[hidden] {
+  display: none;
+}
+
+.editor-title {
+  color: #9a9a9a;
+}
+
+.editor-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.editor-side input {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 6px;
+  background: #545454;
+  color: #fff;
+  border: 1px solid #3d3d3d;
+  border-radius: 3px;
+  outline: none;
+  font: inherit;
+  text-align: right;
+}
+
+.editor-side input:not(:focus) {
+  cursor: ew-resize; /* dragged left and right, it slides */
+}
+
+.editor-side input:not(:focus):hover {
+  background: #656565;
+}
+
+.editor-side input:focus {
+  background: #1d1d1d;
+  border-color: #4772b3;
+}
+
+/* A live asset's parameters: a row each, a name and its field. */
+.editor-params,
+.editor-param-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.editor-params[hidden],
+.editor-params [hidden] {
+  display: none;
+}
+
+.editor-param {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.editor-side input[type='checkbox'] {
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+.editor-param-name {
+  flex: 0 0 82px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editor-param.changed .editor-param-name {
+  color: #ff9a2e; /* differs from its builder's default */
+}
+
+.editor-side select,
+.editor-side .editor-json {
+  flex: 1;
+  min-width: 0;
+  padding: 2px 4px;
+  background: #545454;
+  color: #fff;
+  border: 1px solid #3d3d3d;
+  border-radius: 3px;
+  font: inherit;
+  text-align: left;
+}
+
+.editor-side .editor-json:not(:focus) {
+  cursor: text;
+}
+
+.editor-side button {
+  padding: 3px 8px;
+  background: #545454;
+  color: #fff;
+  border: 1px solid #3d3d3d;
+  border-radius: 3px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.editor-side button:hover {
+  background: #4772b3;
+}
+
+.editor-side .editor-param-back {
+  padding: 0 4px;
+  background: none;
+  border: 0;
+  color: #9a9a9a;
+}
+
+.editor-meaning {
+  min-height: 2.8em;
+  color: #9a9a9a;
+}
+
+.editor-parts {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.editor-record summary {
+  cursor: pointer;
+  color: #9a9a9a;
+}
+
+.editor-record textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 40vh;
+  margin-top: 4px;
+  resize: vertical;
+  background: #1d1d1d;
+  color: inherit;
+  border: 1px solid #3d3d3d;
+  outline: none;
+  font: 11px/1.4 ui-monospace, Menlo, Consolas, monospace;
+  tab-size: 2;
+}
+
+.editor-error {
+  color: #ff6b5e;
+  white-space: pre-wrap;
+}
+
+.editor-bar {
+  display: none;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 24px;
+  padding: 0 10px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.editor-bar.shown {
+  display: flex;
+}
+
+.editor-said {
+  color: #fff;
+}
+
+.editor-keys {
+  color: #9a9a9a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.editor-add {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  padding: 4px;
+  border: 1px solid #3d3d3d;
+  border-radius: 4px;
+}
+
+.editor-add b {
+  padding: 2px 8px;
+  color: #9a9a9a;
+  font-weight: normal;
+}
+
+.editor-add button {
+  padding: 3px 8px;
+  background: none;
+  color: inherit;
+  border: 0;
+  border-radius: 3px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.editor-add button:hover {
+  background: #4772b3;
+  color: #fff;
+}
+
+/* A box select's rectangle, as Blender draws it. */
+.editor-lasso {
+  position: fixed;
+  border: 1px dashed #fff;
+  background: rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+  z-index: 21;
+}
+
+/* While the editor has the world the game's own overlay is in the way of it. */
+body.editing .hud {
+  visibility: hidden;
+}
